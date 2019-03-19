@@ -1,0 +1,1 @@
+import { noteData } from './firebaseConnect';
