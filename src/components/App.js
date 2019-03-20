@@ -4,6 +4,7 @@ import {noteData} from './firebaseConnect';
 import Nav from './Nav';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
+import { connect } from 'react-redux';
 
 var data = noteData.once('value').then(function(snapshot){
   return snapshot.val();
@@ -11,25 +12,20 @@ var data = noteData.once('value').then(function(snapshot){
 
 class App extends Component {
   
-  pushData = (item) => {
-    noteData.push(item);
-    console.log(item)
+  showForm = () => {
+    if(this.props.editStatus) {
+      return <NoteForm/>
+    }
   }
-  deleteData = () => {
-    noteData.child('-LaJ6dPgyDGHnuos4Fyq').remove();
-  }
-
+  
   render() {
-    noteData.once('value').then(function(snapshot){
-      console.log(snapshot.val())
-    })
     return (
       <div className="">
         <Nav></Nav>
         <div className="container">
           <div className="row">
             <NoteList data = {data}/>
-            <NoteForm sendData = {(item) => this.pushData(item)}/>
+            {this.showForm()}
           </div>
         </div>
       </div>
@@ -37,4 +33,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    editStatus: state.editStatus,
+  }
+}
+
+export default connect(mapStateToProps)(App);
