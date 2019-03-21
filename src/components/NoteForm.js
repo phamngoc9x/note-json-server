@@ -30,22 +30,36 @@ class NoteForm extends Component {
   }
 
   addData = (title, content) => {
-    var item = {};
-    item.title = title;
-    item.noteContent = content;
-    //this.props.sendData(item);
+    
     if(this.state.id) {
-
+      var editOject = {};
+      editOject.id = this.state.id;
+      editOject.title = this.state.title;
+      editOject.noteContent = this.state.noteContent;
+      console.log('dang sua du lieu');
+      this.props.editDataStore(editOject);
+      this.props.editForm();
     }else{
+      var item = {};
+      item.title = title;
+      item.noteContent = content;
       this.props.addDataStore(item);
     }
     
   }
 
+  printTitle = ()=>{
+    if(this.props.isAdd) {
+      return <h5 className="mt-3">Thêm mới Ghi Chú</h5>
+    }
+    else {
+      return <h5 className="mt-3">Sửa Ghi Chú</h5>
+    }
+  }
   render() {
     return (
       <div className="col-4">
-        <h3 className="mt-3">SỬA NỘI DUNG NOTE</h3>
+        {this.printTitle()}
         <form>
         <div className="form-group">
           <label htmlFor="title">Tiêu đề Note</label>
@@ -57,7 +71,7 @@ class NoteForm extends Component {
           <textarea type="text"  onChange = {(event) => this.handleChange(event)} defaultValue = {this.props.editData.noteContent} className="form-control" name="noteContent" id="noteContent" aria-describedby="helptitle" placeholder="Nội dung Note"  />
           <small id="helptitle" className="form-text text-muted">Điền nội dung vào đây</small>
         </div>
-        <button type="reset" className="btn btn-primary btn-block" onClick = {() => this.addData(this.state.id, this.state.title, this.state.noteContent)}>Lưu</button>
+        <button type="reset" className="btn btn-primary btn-block" onClick = {() => this.addData( this.state.title, this.state.noteContent)}>Lưu</button>
         </form>
       </div>
 
@@ -66,14 +80,21 @@ class NoteForm extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    editData : state.editData
+    editData : state.editData,
+    isAdd: state.isAdd,
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addDataStore: (newItem) => {
       dispatch({type:"ADD_DATA", newItem})
-    }
+    },
+    editDataStore: (getItem) => {
+      dispatch({type:"EDIT", getItem})
+    },
+    editForm: () => {
+      dispatch({type:"CHANGE_EDIT_STATUS"})
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NoteForm);

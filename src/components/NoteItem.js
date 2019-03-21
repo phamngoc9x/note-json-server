@@ -32,7 +32,7 @@ class NoteItem extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-   dataEdit: state.dataEdit
+   dataEdit: state.dataEdit,
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
