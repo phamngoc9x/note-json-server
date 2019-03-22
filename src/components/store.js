@@ -1,4 +1,9 @@
-import { noteData } from './firebaseConnect';
+const axios = require('axios');
+const dataJson = () => axios.get('http://localhost:3000/notes').then((res) => res.data);
+const dataAdd = (item) => {
+  console.error("action.newItem", item)
+  return axios.post('http://localhost:3000/notes', {item}).then((res) => res.data)
+};
 
 var redux = require('redux');
 
@@ -10,11 +15,12 @@ const noteInitialState = {
 const allReducer = (state = noteInitialState, action) => {
   switch (action.type) {
     case 'ADD_DATA':
-      noteData.push(action.newItem);
+      dataAdd(action.newItem);
+      
       return state
 
     case 'DELETE_NOTE':
-      noteData.child(String(action.id)).remove();
+      //noteData.child(String(action.id)).remove();
       return state
 
     case 'CHANGE_EDIT_STATUS':
@@ -27,10 +33,10 @@ const allReducer = (state = noteInitialState, action) => {
       return {...state, editData: action.editObject}
 
     case 'EDIT':
-      noteData.child(action.getItem.id).update({
-        title : action.getItem.title,
-        noteContent: action.getItem.noteContent
-      })
+      // noteData.child(action.getItem.id).update({
+      //   title : action.getItem.title,
+      //   noteContent: action.getItem.noteContent
+      // })
       return {...state, editData:{}}
 
     default:

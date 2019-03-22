@@ -12,7 +12,7 @@ class NoteItem extends Component {
       <div className="card mt-3">
         <div className="card-header" role="tab" id="note1">
           <h5 className="mb-0">
-            <a data-toggle="collapse" data-parent="#noteList" href={'#' + this.props.id} aria-expanded="true" aria-controls={this.props.id}>
+            <a data-toggle="collapse" data-parent="#noteList" href={'#noteid' + this.props.id} aria-expanded="true" aria-controls={this.props.id}>
               {this.props.title}
             </a>
             <div className ="btn-group float-right">
@@ -20,9 +20,9 @@ class NoteItem extends Component {
               <button className="btn btn-outline-danger" onClick={() =>this.props.deleteItem(this.props.id)}>Xoá</button>
             </div>
           </h5>
-        <div id={this.props.id} className="collapse in" role="tabpanel" aria-labelledby="note1">
+        <div id={'noteid' + this.props.id}  className="collapse in" role="tabpanel" aria-labelledby="note1">
           <div className="card-body">
-            {this.props.noteContent}
+            {this.props.content}
           </div>
         </div>
       </div>

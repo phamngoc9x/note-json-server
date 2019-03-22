@@ -6,7 +6,7 @@ class NoteForm extends Component {
     super(props);
     this.state = {
       title: '',
-      noteContent:'',
+      content:'',
       id: ''
     }
   }
@@ -15,7 +15,7 @@ class NoteForm extends Component {
     if(this.props.editData) {
       this.setState({
         title: this.props.editData.title,
-        noteContent: this.props.editData.noteContent,
+        content: this.props.editData.content,
         id : this.props.editData.id,
       })
     }
@@ -35,14 +35,14 @@ class NoteForm extends Component {
       var editOject = {};
       editOject.id = this.state.id;
       editOject.title = this.state.title;
-      editOject.noteContent = this.state.noteContent;
+      editOject.content = this.state.content;
       console.log('dang sua du lieu');
       this.props.editDataStore(editOject);
       this.props.editForm();
     }else{
       var item = {};
       item.title = title;
-      item.noteContent = content;
+      item.content = content;
       this.props.addDataStore(item);
     }
     
@@ -68,10 +68,10 @@ class NoteForm extends Component {
         </div>
         <div className="form-group">
           <label htmlFor="title">Nội dung Note</label>
-          <textarea type="text"  onChange = {(event) => this.handleChange(event)} defaultValue = {this.props.editData.noteContent} className="form-control" name="noteContent" id="noteContent" aria-describedby="helptitle" placeholder="Nội dung Note"  />
+          <textarea type="text"  onChange = {(event) => this.handleChange(event)} defaultValue = {this.props.editData.content} className="form-control" name="content" id="content" aria-describedby="helptitle" placeholder="Nội dung Note"  />
           <small id="helptitle" className="form-text text-muted">Điền nội dung vào đây</small>
         </div>
-        <button type="reset" className="btn btn-primary btn-block" onClick = {() => this.addData( this.state.title, this.state.noteContent)}>Lưu</button>
+        <button type="reset" className="btn btn-primary btn-block" onClick = {() => this.addData( this.state.title, this.state.content)}>Lưu</button>
         </form>
       </div>
 
