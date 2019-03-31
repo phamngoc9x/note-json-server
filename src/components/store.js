@@ -1,26 +1,18 @@
 const axios = require('axios');
-const dataJson = () => axios.get('http://localhost:3000/notes').then((res) => res.data);
-const dataAdd = (item) => {
-  console.error("action.newItem", item)
-  return axios.post('http://localhost:3000/notes', {item}).then((res) => res.data)
-};
-
 var redux = require('redux');
 
 const noteInitialState = {
   editStatus: false,
+  data: [],
   editData: {},
   isAdd : false
 }
 const allReducer = (state = noteInitialState, action) => {
   switch (action.type) {
     case 'ADD_DATA':
-      dataAdd(action.newItem);
-      
-      return state
+    return state
 
     case 'DELETE_NOTE':
-      //noteData.child(String(action.id)).remove();
       return state
 
     case 'CHANGE_EDIT_STATUS':
@@ -32,12 +24,11 @@ const allReducer = (state = noteInitialState, action) => {
     case 'GET_DATA_EDIT':
       return {...state, editData: action.editObject}
 
-    case 'EDIT':
-      // noteData.child(action.getItem.id).update({
-      //   title : action.getItem.title,
-      //   noteContent: action.getItem.noteContent
-      // })
-      return {...state, editData:{}}
+
+      
+    case 'UPDATE_LIST':
+
+      return {...state, data:action.data}
 
     default:
       return state
@@ -46,6 +37,5 @@ const allReducer = (state = noteInitialState, action) => {
 var store = redux.createStore(allReducer);
 store.subscribe(function(){
   console.log(store.getState());
-  
 })
 export default store;

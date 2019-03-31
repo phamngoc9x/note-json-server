@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-//import {noteData} from './firebaseConnect';
 import Nav from './Nav';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 import { connect } from 'react-redux';
 const axios = require('axios');
-const dataJson = () => axios.get('http://localhost:3000/notes').then((res) => res.data);
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: null
-    }
   }
 
   showForm = () => {
@@ -20,26 +15,21 @@ class App extends Component {
       return <NoteForm/>
     }
   }
-  
-  componentWillMount() {
-    if(this.state.data === null) {
-      dataJson().then((res) => {
-        this.setState({
-          data:res
-        })
-      })
-    }
-  }
-  render() {
-    console.log(this.state.data);
-    
 
+  componentDidMount() {
+    axios.get('http://localhost:3000/notes').then((res) =>  {
+      this.props.updateData(res.data);
+    })
+  }
+
+  render() {
+    console.log(this.props.data);
     return (
       <div className="">
         <Nav></Nav>
         <div className="container">
           <div className="row">
-            <NoteList data = {this.state.data}/>
+            <NoteList dataTest = {this.props.data}/>
             {this.showForm()}
           </div>
         </div>
@@ -48,10 +38,20 @@ class App extends Component {
   }
 }
 
+
 const mapStateToProps = (state, ownProps) => {
   return {
     editStatus: state.editStatus,
+    data: state.data
+  }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    updateData: (data) => {
+      dispatch({type:"UPDATE_LIST", data})
+    },
+   
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
