@@ -4,14 +4,11 @@ import Nav from './Nav';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 import { connect } from 'react-redux';
+import { updateList } from '../actions/index';
 const axios = require('axios');
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   showForm = () => {
-    if(this.props.editStatus) {
+    if(this.props.editStatus ||this.props.isAdd) {
       return <NoteForm/>
     }
   }
@@ -40,15 +37,17 @@ class App extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
+  //console.error("state", state, ownProps)
   return {
     editStatus: state.editStatus,
+    isAdd: state.isAdd,
     data: state.data
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateData: (data) => {
-      dispatch({type:"UPDATE_LIST", data})
+      dispatch(updateList(data))
     },
    
   }

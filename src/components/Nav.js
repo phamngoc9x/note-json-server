@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { changeEditStatus, addStatus } from '../actions/index';
 
 class Nav extends Component {
   handleAdd = (event) => {
     event.preventDefault();
-    this.props.changeEditStatus();
+    //this.props.changeEditStatus();
     this.props.changeAddStatus();
     
   }
@@ -35,10 +36,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     changeEditStatus: () => {
-      dispatch({type:"CHANGE_EDIT_STATUS"})
+      dispatch(changeEditStatus())
     },
     changeAddStatus: () => {
-      dispatch({type:"CHANGE_ADD_STATUS"})
+      dispatch(addStatus())
     },
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { addData, changeEditStatus, addStatus, updateList } from '../actions/index';
 const axios = require('axios');
 
 class NoteForm extends Component {
@@ -13,7 +14,7 @@ class NoteForm extends Component {
   }
   
   componentWillMount() {
-    if(this.props.editData) {
+    if(!this.props.isAdd) {
       this.setState({
         title: this.props.editData.title,
         content: this.props.editData.content,
@@ -24,7 +25,6 @@ class NoteForm extends Component {
   handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-        
     this.setState( {
       [name]: value
     })
@@ -36,24 +36,24 @@ class NoteForm extends Component {
       editOject.id = this.state.id;
       editOject.title = this.state.title;
       editOject.content = this.state.content;
-      //this.props.editDataStore(editOject);
       this.props.editForm();
       axios.get('http://localhost:3000/notes').then((res) =>  {
-      res.data.map( (data) =>{
-        if(data.id === this.state.id){
-          console.log(this.state.id)
-          axios.put('http://localhost:3000/notes/' + this.state.id, editOject).then((res) => {
-            axios.get('http://localhost:3000/notes').then((res) =>  {
-              this.props.updateData(res.data);
+        res.data.map( (data) =>{
+          if(data.id === this.state.id){
+            console.log(this.state.id)
+            axios.put('http://localhost:3000/notes/' + this.state.id, editOject).then((res) => {
+              axios.get('http://localhost:3000/notes').then((res) =>  {
+                this.props.updateData(res.data);
+              })
             })
-          })
-        }
+          }
+        })
       })
-    })
     }else{
       var item = {};
       item.title = title;
       item.content = content;
+      this.props.changeAddStatus();
       axios.post('http://localhost:3000/notes', item).then((res) =>{
         console.log(res.data);
         this.props.addDataStore(res.data);
@@ -81,12 +81,12 @@ class NoteForm extends Component {
         <form>
         <div className="form-group">
           <label htmlFor="title">Tiêu đề Note</label>
-          <input type="text" onChange = {(event) => this.handleChange(event)} defaultValue = {this.props.editData.title} className="form-control" name="title" id="title" aria-describedby="helptitle" placeholder="Tiêu đề Note" />
+          <input type="text" onChange = {(event) => this.handleChange(event)} value={this.state.title} className="form-control" name="title" id="title" aria-describedby="helptitle" placeholder="Tiêu đề Note" />
           <small id="helptitle" className="form-text text-muted">Điền tiêu đề vào đây</small>
         </div>
         <div className="form-group">
           <label htmlFor="title">Nội dung Note</label>
-          <textarea type="text"  onChange = {(event) => this.handleChange(event)} defaultValue = {this.props.editData.content} className="form-control" name="content" id="content" aria-describedby="helptitle" placeholder="Nội dung Note"  />
+          <textarea type="text"  onChange = {(event) => this.handleChange(event)} value = {this.state.content} className="form-control" name="content" id="content" aria-describedby="helptitle" placeholder="Nội dung Note"  />
           <small id="helptitle" className="form-text text-muted">Điền nội dung vào đây</small>
         </div>
         <button type="reset" className="btn btn-primary btn-block" onClick = {() => this.addData( this.state.title, this.state.content)}>Lưu</button>
@@ -105,16 +105,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addDataStore: (newItem) => {
-      dispatch({type:"ADD_DATA", newItem})
-    },
-    editDataStore: (getItem) => {
-      dispatch({type:"EDIT", getItem})
+      dispatch(addData(newItem));
     },
     editForm: () => {
-      dispatch({type:"CHANGE_EDIT_STATUS"})
+      dispatch(changeEditStatus())
+    },
+    changeAddStatus: () => {
+      dispatch(addStatus())
     },
     updateData: (data) => {
-      dispatch({type:"UPDATE_LIST", data})
+      dispatch(updateList(data))
     }
   }
 }

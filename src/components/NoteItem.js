@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { deleteNote, changeEditStatus, updateList, getDataEdit } from '../actions/index';
 const axios = require('axios');
 
 class NoteItem extends Component {
@@ -11,8 +12,7 @@ class NoteItem extends Component {
   }
   getDelete = (id) => {
     axios.get('http://localhost:3000/notes').then((res) =>  {
-      console.log(typeof(res.data));
-        res.data.map( (value) =>{
+        res.data.map((value) =>{
           if(value.id === id){
             axios.delete('http://localhost:3000/notes/' + id).then((res) => {
               axios.get('http://localhost:3000/notes').then((res) =>  {
@@ -55,16 +55,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     deleteItem: (id) => {
-      dispatch({type:"DELETE_NOTE", id})
+      dispatch(deleteNote(id))
     },
     editForm: () => {
-      dispatch({type:"CHANGE_EDIT_STATUS"})
+      dispatch(changeEditStatus())
     },
     getEditItem: (editObject) => {
-      dispatch({type:"GET_DATA_EDIT", editObject})
+      dispatch(getDataEdit(editObject))
     },
     updateData: (data) => {
-      dispatch({type:"UPDATE_LIST", data})
+      dispatch(updateList(data))
     }
   }
 }
