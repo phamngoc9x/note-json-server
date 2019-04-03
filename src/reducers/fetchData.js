@@ -1,8 +1,10 @@
+import * as Types from './../constants/ActionTypes';
 const noteInitialState = []
 const allReducer = (state = noteInitialState, action) => {
   switch (action.type) {
-    case 'UPDATE_LIST':
-      return action.data
+    case Types.FETCH_DATA:
+    state = action.data;
+      return state
     default:
       return state
   }

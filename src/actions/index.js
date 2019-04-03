@@ -1,4 +1,5 @@
 import * as types from '../constants/ActionTypes';
+import callApi from '../utils/apiCaller';
 
 export const addData = () =>{
   return {
@@ -33,5 +34,12 @@ export const updateList = (data) =>{
   return {
     type: types.UPDATE_LIST,
     data 
+  }
+}
+export const fetchData = () =>{
+  return (dispatch) =>{
+    return callApi('notes', 'GET', null).then(res => {
+      dispatch(updateList(res.data))
+    })
   }
 }

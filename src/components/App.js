@@ -4,8 +4,9 @@ import Nav from './Nav';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 import { connect } from 'react-redux';
-import { updateList } from '../actions/index';
-const axios = require('axios');
+import { updateList, fetchData } from '../actions/index';
+import apiCaller from '../utils/apiCaller'
+
 class App extends Component {
   showForm = () => {
     if(this.props.editStatus ||this.props.isAdd) {
@@ -14,9 +15,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3000/notes').then((res) =>  {
-      this.props.updateData(res.data);
-    })
+    this.props.fetchData();
   }
 
   render() {
@@ -46,8 +45,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateData: (data) => {
-      dispatch(updateList(data))
+    fetchData: () => {
+      dispatch(fetchData())
     },
    
   }
