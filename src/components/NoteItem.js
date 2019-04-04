@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { deleteNote, changeEditStatus, updateList, getDataEdit } from '../actions/index';
+import { changeEditStatus, getDataEdit, deleteNoteRequest, fetchData } from '../actions/index';
 const axios = require('axios');
 
 class NoteItem extends Component {
@@ -11,18 +11,7 @@ class NoteItem extends Component {
     
   }
   getDelete = (id) => {
-    axios.get('http://localhost:3000/notes').then((res) =>  {
-        res.data.map((value) =>{
-          if(value.id === id){
-            axios.delete('http://localhost:3000/notes/' + id).then((res) => {
-              axios.get('http://localhost:3000/notes').then((res) =>  {
-                this.props.updateData(res.data);
-              })
-            })
-          }
-        })
-    })
-    
+    this.props.deleteNote(id);
   }
   render() {
     return (
@@ -54,8 +43,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    deleteItem: (id) => {
-      dispatch(deleteNote(id))
+    deleteNote: (id) => {
+      dispatch(deleteNoteRequest(id))
     },
     editForm: () => {
       dispatch(changeEditStatus())
@@ -63,8 +52,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     getEditItem: (editObject) => {
       dispatch(getDataEdit(editObject))
     },
-    updateData: (data) => {
-      dispatch(updateList(data))
+    fetchData: () => {
+      dispatch(fetchData())
     }
   }
 }

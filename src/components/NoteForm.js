@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addData, changeEditStatus, addStatus, updateList } from '../actions/index';
-const axios = require('axios');
+import { addData, changeEditStatus, addStatus, updateList,addDataRequest,addEditData } from '../actions/index';
+
 
 class NoteForm extends Component {
   constructor(props) {
@@ -37,30 +37,25 @@ class NoteForm extends Component {
       editOject.title = this.state.title;
       editOject.content = this.state.content;
       this.props.editForm();
-      axios.get('http://localhost:3000/notes').then((res) =>  {
-        res.data.map( (data) =>{
-          if(data.id === this.state.id){
-            console.log(this.state.id)
-            axios.put('http://localhost:3000/notes/' + this.state.id, editOject).then((res) => {
-              axios.get('http://localhost:3000/notes').then((res) =>  {
-                this.props.updateData(res.data);
-              })
-            })
-          }
-        })
-      })
+      this.props.addEditData(this.state.id,editOject);
+      // axios.put('http://localhost:3000/notes/' + this.state.id, editOject).then((res) => {
+      //   axios.get('http://localhost:3000/notes').then((res) =>  {
+      //     this.props.updateData(res.data);
+      //   })
+      // })
     }else{
       var item = {};
       item.title = title;
       item.content = content;
       this.props.changeAddStatus();
-      axios.post('http://localhost:3000/notes', item).then((res) =>{
-        console.log(res.data);
-        this.props.addDataStore(res.data);
-        axios.get('http://localhost:3000/notes').then((res) =>  {
-          this.props.updateData(res.data);
-        })
-      })
+      this.props.addDataRequest(item);
+      // axios.post('http://localhost:3000/notes', item).then((res) =>{
+      //   console.log(res.data);
+      //   this.props.addDataStore(res.data);
+      //   axios.get('http://localhost:3000/notes').then((res) =>  {
+      //     this.props.updateData(res.data);
+      //   })
+      // })
       
     }
     
@@ -115,6 +110,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     updateData: (data) => {
       dispatch(updateList(data))
+    },
+    addDataRequest: (item) => {
+      dispatch(addDataRequest(item))
+    },
+    addEditData: (id,item) => {
+      dispatch(addEditData(id,item))
     }
   }
 }

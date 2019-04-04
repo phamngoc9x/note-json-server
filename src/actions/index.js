@@ -36,10 +36,34 @@ export const updateList = (data) =>{
     data 
   }
 }
+export const addEditData = (id,editOject) =>{
+  return (dispatch) =>{
+    return callApi('notes'+id, 'PUT', editOject).then(res => {
+      dispatch(fetchData());
+    })
+  }
+}
 export const fetchData = () =>{
   return (dispatch) =>{
     return callApi('notes', 'GET', null).then(res => {
       dispatch(updateList(res.data))
+    })
+  }
+}
+export const deleteNoteRequest = (id) =>{
+  return (dispatch) =>{
+    return callApi(`notes/${id}`, 'DELETE', null).then(res => {
+      dispatch(deleteNote(id));
+      dispatch(fetchData());
+    })
+  }
+}
+//add data API
+export const addDataRequest = (item) =>{
+  return (dispatch) =>{
+    return callApi('notes', 'POST', item).then(res => {
+      dispatch(addData());
+      dispatch(fetchData());
     })
   }
 }

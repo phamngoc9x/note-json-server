@@ -5,7 +5,7 @@ import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 import { connect } from 'react-redux';
 import { updateList, fetchData } from '../actions/index';
-import apiCaller from '../utils/apiCaller'
+
 
 class App extends Component {
   showForm = () => {
